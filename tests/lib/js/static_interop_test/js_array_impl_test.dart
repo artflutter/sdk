@@ -203,6 +203,36 @@ void nonModedTests<T extends JSAny?>({required bool testProxy}) {
     Expect.equals(i, list.lastIndexOf(i.toJS as T));
   }
 
+  // lastIndexWhere
+  list = toJSList([1, 2, 1, 3]);
+  bool isOne(T value) => value?.toDouble == 1;
+  Expect.equals(2, list.lastIndexWhere(isOne));
+  Expect.equals(0, list.lastIndexWhere(isOne, 1));
+  for (final start in <int?>[null, list.length - 1, list.length, 100]) {
+    final visited = <double?>[];
+    Expect.equals(
+      2,
+      list.lastIndexWhere((value) {
+        visited.add(value?.toDouble);
+        return isOne(value);
+      }, start),
+    );
+    Expect.listEquals([3, 1], visited);
+    Expect.equals(-1, list.lastIndexWhere((value) => false, start));
+  }
+  Expect.equals(-1, list.lastIndexWhere((value) => true, -1));
+
+  list = toJSList([]);
+  for (final start in <int?>[null, -1, 0, 100]) {
+    Expect.equals(
+      -1,
+      list.lastIndexWhere((value) {
+        Expect.fail('The predicate must not be called for an empty list.');
+        return true;
+      }, start),
+    );
+  }
+
   // fillRange
   list = toJSList([3, 3, 3, 1]);
   list.fillRange(1, 3);

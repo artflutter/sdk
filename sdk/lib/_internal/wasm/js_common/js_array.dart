@@ -584,7 +584,7 @@ class JSArrayImpl<T extends JSAny?> extends js.JSExternWrapper
 
   @override
   int lastIndexWhere(bool Function(T) test, [int? start]) {
-    if (start == null) {
+    if (start == null || start >= length) {
       start = length - 1;
     }
     if (start < 0) {

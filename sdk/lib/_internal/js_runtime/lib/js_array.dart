@@ -832,7 +832,7 @@ class JSArray<E> extends JavaScriptObject implements List<E>, JSIndexable<E> {
   }
 
   int lastIndexWhere(bool Function(E element) test, [int? start]) {
-    if (start == null) start = this.length - 1;
+    if (start == null || start >= this.length) start = this.length - 1;
     if (start < 0) return -1;
     for (int i = start; i >= 0; i--) {
       if (test(this[i])) return i;
