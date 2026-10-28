@@ -146,7 +146,7 @@ abstract class ByteDataBase extends WasmTypedDataBase implements ByteData {
   @override
   void setUint8(int byteOffset, int value) {
     _offsetRangeCheck(byteOffset, 1);
-    return _setUint8Unchecked(byteOffset, value);
+    _setUint8Unchecked(byteOffset, value.toUnsigned(8));
   }
 
   void _setUint8Unchecked(int byteOffset, int value);
