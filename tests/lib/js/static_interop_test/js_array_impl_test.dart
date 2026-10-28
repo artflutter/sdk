@@ -191,6 +191,11 @@ void nonModedTests<T extends JSAny?>({required bool testProxy}) {
   Expect.equals(2, iterator.current?.toDouble);
   Expect.isFalse(iterator.moveNext());
 
+  final nullIterator = toJSList([null]).iterator;
+  Expect.isTrue(nullIterator.moveNext());
+  Expect.isNull(nullIterator.current);
+  Expect.isFalse(nullIterator.moveNext());
+
   // length
   Expect.equals(4, list.length);
   list.length = 3;
