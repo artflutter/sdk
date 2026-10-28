@@ -180,6 +180,17 @@ void nonModedTests<T extends JSAny?>({required bool testProxy}) {
   }
   Expect.equals(5, count);
 
+  // The current element stays unchanged until the next moveNext call.
+  final iteratorList = toJSList([1, 2]);
+  final iterator = iteratorList.iterator;
+  Expect.isTrue(iterator.moveNext());
+  Expect.equals(1, iterator.current?.toDouble);
+  iteratorList[0] = 99.toJS as T;
+  Expect.equals(1, iterator.current?.toDouble);
+  Expect.isTrue(iterator.moveNext());
+  Expect.equals(2, iterator.current?.toDouble);
+  Expect.isFalse(iterator.moveNext());
+
   // length
   Expect.equals(4, list.length);
   list.length = 3;
