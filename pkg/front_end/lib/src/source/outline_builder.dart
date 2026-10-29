@@ -426,6 +426,7 @@ extension on DeclarationContext {
     switch (this) {
       case DeclarationContext.Class:
       case DeclarationContext.ClassOrMixinOrNamedMixinApplication:
+      case DeclarationContext.Enum:
       case DeclarationContext.Mixin:
       case DeclarationContext.NamedMixinApplication:
         return TypeParameterKind.classMixinOrEnum;
@@ -442,7 +443,6 @@ extension on DeclarationContext {
       case DeclarationContext.ClassInstanceMethod:
       case DeclarationContext.ClassStaticField:
       case DeclarationContext.ClassStaticMethod:
-      case DeclarationContext.Enum:
       case DeclarationContext.EnumBody:
       case DeclarationContext.EnumConstructor:
       case DeclarationContext.EnumFactory:
