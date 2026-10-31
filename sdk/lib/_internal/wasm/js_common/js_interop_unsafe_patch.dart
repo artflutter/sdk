@@ -17,9 +17,9 @@ extension JSObjectUnsafeUtilExtension on JSObject {
   );
 
   @patch
-  T getProperty<T extends JSAny?>(JSAny property) => JSValue.boxT<T>(
+  T getProperty<T extends JSAny?>(JSAny property) => JSValue.boxT<JSAny?>(
     JS<WasmExternRef?>('(o, p) => o[p]', toExternRef, property.toExternRef),
-  );
+  ) as T;
 
   @patch
   void setProperty(JSAny property, JSAny? value) => JS<WasmVoid>(
