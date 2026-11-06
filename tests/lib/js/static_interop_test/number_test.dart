@@ -8,6 +8,8 @@ import 'dart:js_interop';
 
 import 'package:expect/expect.dart';
 
+const isJSBackend = const bool.fromEnvironment('dart.library.html');
+
 extension type IntE(int _) {}
 
 extension type NullableIntE(int? _) {}
@@ -117,11 +119,23 @@ external num? get nullAsNullNum;
 @JS('nullVal')
 external JSNumber? get nullAsNullJSNumber;
 
+// Value that is too large for a 64-bit int.
+
+@JS('twoTo63')
+external int get twoTo63AsInt;
+
+@JS('twoTo63')
+external int? get twoTo63AsNullInt;
+
+@JS('twoTo63')
+external JSNumber get twoTo63AsJSNumber;
+
 void main() {
   eval('''
     globalThis.integer = 0;
     globalThis.float = 0.5;
     globalThis.nullVal = null;
+    globalThis.twoTo63 = 9223372036854775808;
   ''');
 
   Expect.equals(0, integerAsInt);
@@ -163,4 +177,8 @@ void main() {
   Expect.isNull(nullAsNullDouble);
   Expect.isNull(nullAsNullNum);
   Expect.isNull(nullAsNullJSNumber);
+
+  Expect.throwsWhen(!isJSBackend, () => twoTo63AsInt);
+  Expect.throwsWhen(!isJSBackend, () => twoTo63AsNullInt);
+  Expect.throwsWhen(!isJSBackend, () => twoTo63AsJSNumber.toDartInt);
 }

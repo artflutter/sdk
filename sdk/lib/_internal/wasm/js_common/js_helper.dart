@@ -159,11 +159,12 @@ int _checkNumberType(WasmExternRef? ref) {
 }
 
 int _jsNonNullToInt(WasmExternRef? ref, bool typeIsRight) {
+  const int maxInt = 0x7FFFFFFFFFFFFFFF;
   if (typeIsRight) {
     final dartDouble = _toDartDoubleUnchecked(ref);
     if (dartDouble.isFinite) {
       final dartInt = dartDouble.toInt();
-      if (dartInt.toDouble() == dartDouble) {
+      if (dartInt.toDouble() == dartDouble && dartInt != maxInt) {
         return dartInt;
       }
     }
