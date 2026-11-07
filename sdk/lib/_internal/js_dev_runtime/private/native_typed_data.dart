@@ -2271,8 +2271,7 @@ mixin _UnmodifiableTypedListMixin<N, L extends List<N>, TD extends TypedData> {
   L _createList(int length);
 
   L sublist(int start, [int? end]) {
-    // NNBD: Spurious error at `end`, `checkValidRange` is legacy.
-    int endIndex = RangeError.checkValidRange(start, end!, length);
+    int endIndex = RangeError.checkValidRange(start, end, length);
     int sublistLength = endIndex - start;
     L result = _createList(sublistLength);
     result.setRange(0, sublistLength, _list, start);
