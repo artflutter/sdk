@@ -138,8 +138,8 @@ base class CustomHashMap<K, V> extends InternalMap<K, V> {
           K k = JS('', '#[#]', bucket, i);
           if (equals(k, key)) {
             if (modifications != _modifications) break concurrentModification;
-            key = k;
-            break;
+            JS('', '#.set(#, #)', _map, k, value);
+            return;
           }
           if (++i >= n) {
             // Check for modification before adding key to bucket.

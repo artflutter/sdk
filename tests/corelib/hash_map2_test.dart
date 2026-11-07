@@ -302,6 +302,10 @@ void main() {
 
   testMap(() => new HashMap(), (m) => new HashMap.from(m));
   testMap(() => new LinkedHashMap(), (m) => new LinkedHashMap.from(m));
+
+  Map newCustom() =>
+      new LinkedHashMap(equals: (a, b) => a == b, hashCode: (a) => a.hashCode);
+  testMap(newCustom, (m) => newCustom()..addAll(m));
 }
 
 class BadHashCode {
