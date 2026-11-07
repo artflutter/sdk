@@ -534,6 +534,7 @@ abstract mixin class Stream<T> {
         }
       }
 
+      watch.start();
       Timer timer = Timer.periodic(period, sendEvent);
       controller
         ..onCancel = () {
