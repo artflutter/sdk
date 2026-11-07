@@ -182,6 +182,13 @@ byteDataTest() {
   checkIndirectUnmodifiable(ubdv);
 }
 
+sublistTest() {
+  Uint8List u8l = Uint8List.fromList(intList);
+  Uint8List list = u8l.asUnmodifiableView();
+  Expect.listEquals(intList.sublist(1), list.sublist(1));
+  Expect.throwsRangeError(() => list.sublist(list.length + 1));
+}
+
 main() {
   int8ListTest();
   uint8ListTest();
@@ -197,4 +204,5 @@ main() {
   float32ListTest();
   float64ListTest();
   byteDataTest();
+  sublistTest();
 }
