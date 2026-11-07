@@ -158,6 +158,9 @@ testMap(Map newMap(), Map newMapFrom(Map map)) {
       addAll(map, map2);
       // Shouldn't throw.
       iter.moveNext();
+      iter = map.keys.iterator;
+      map.addAll(map2);
+      iter.moveNext();
     }
   }
 
@@ -306,6 +309,11 @@ void main() {
   Map newCustom() =>
       new LinkedHashMap(equals: (a, b) => a == b, hashCode: (a) => a.hashCode);
   testMap(newCustom, (m) => newCustom()..addAll(m));
+
+  testMap(
+    () => new HashMap.identity(),
+    (m) => new HashMap.identity()..addAll(m),
+  );
 }
 
 class BadHashCode {

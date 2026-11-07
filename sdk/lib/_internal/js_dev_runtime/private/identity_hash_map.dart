@@ -45,11 +45,12 @@ base class IdentityMap<K, V> extends InternalMap<K, V> {
   }
 
   void addAll(Map<K, V> other) {
-    if (other.isNotEmpty) {
-      var map = _map;
-      other.forEach((key, value) {
-        JS('', '#.set(#, #)', map, key, value);
-      });
+    var map = _map;
+    int length = JS('!', '#.size', map);
+    other.forEach((key, value) {
+      JS('', '#.set(#, #)', map, key, value);
+    });
+    if (length != JS<int>('!', '#.size', map)) {
       _modifications = (_modifications + 1) & 0x3fffffff;
     }
   }
