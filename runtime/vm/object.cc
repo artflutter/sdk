@@ -9445,6 +9445,10 @@ bool Function::RecognizedKindForceOptimize() const {
       return UnaryInt64OpInstr::IsSupported(Token::kPOPCNT);
     case MethodRecognizer::kInteger_trailingZeroBitCount:
       return UnaryInt64OpInstr::IsSupported(Token::kCTZ);
+    // Only force-optimize when the graph body is used. The other targets use
+    // the Dart body.
+    case MethodRecognizer::kDoubleFromInteger:
+      return FlowGraphCompiler::CanConvertInt64ToDouble();
     default:
       return false;
   }

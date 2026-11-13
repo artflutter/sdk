@@ -897,21 +897,9 @@ void AsmIntrinsifier::Double_mulFromInteger(Assembler* assembler,
 }
 
 // Left is double, right is integer (Mint or Smi)
-void AsmIntrinsifier::DoubleFromInteger(Assembler* assembler,
-                                        Label* normal_ir_body) {
-  __ movq(RAX, Address(RSP, +1 * target::kWordSize));
-  __ testq(RAX, Immediate(kSmiTagMask));
-  __ j(NOT_ZERO, normal_ir_body);
-  // Is Smi.
-  __ SmiUntag(RAX);
-  __ OBJ(cvtsi2sd)(XMM0, RAX);
-  const Class& double_class = DoubleClass();
-  __ TryAllocate(double_class, normal_ir_body, Assembler::kFarJump,
-                 RAX,  // Result register.
-                 R13);
-  __ movsd(FieldAddress(RAX, target::Double::value_offset()), XMM0);
-  __ ret();
-  __ Bind(normal_ir_body);
+void AsmIntrinsifier::Double_fromIntegerNative(Assembler* assembler,
+                                               Label* normal_ir_body) {
+  // Not used on this target: _Double.fromInteger has a graph body.
 }
 
 void AsmIntrinsifier::Double_getIsNaN(Assembler* assembler,

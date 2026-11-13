@@ -864,8 +864,8 @@ void AsmIntrinsifier::Double_mulFromInteger(Assembler* assembler,
   __ Bind(normal_ir_body);
 }
 
-void AsmIntrinsifier::DoubleFromInteger(Assembler* assembler,
-                                        Label* normal_ir_body) {
+void AsmIntrinsifier::Double_fromIntegerNative(Assembler* assembler,
+                                               Label* normal_ir_body) {
   Label fall_through;
 
   __ ldr(R0, Address(SP, 0 * target::kWordSize));

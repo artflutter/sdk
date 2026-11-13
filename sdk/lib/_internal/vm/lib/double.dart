@@ -7,10 +7,19 @@ part of "core_patch.dart";
 @pragma('vm:deeply-immutable')
 @pragma("vm:entry-point")
 final class _Double implements double {
+  // On targets where the compiler can convert an unboxed 64-bit integer to a
+  // double, the VM replaces this body with that conversion (see
+  // kernel_to_il.cc). The other targets (32-bit ARM and RISC-V) use this body.
+  @pragma("vm:recognized", "other")
+  @pragma("vm:prefer-inline")
+  @pragma("vm:idempotent")
+  @pragma("vm:exact-result-type", _Double)
+  factory _Double.fromInteger(int value) => _Double._fromIntegerNative(value);
+
   @pragma("vm:recognized", "asm-intrinsic")
   @pragma("vm:exact-result-type", _Double)
   @pragma("vm:external-name", "Double_doubleFromInteger")
-  external factory _Double.fromInteger(int value);
+  external factory _Double._fromIntegerNative(int value);
 
   @pragma("vm:recognized", "other")
   @pragma("vm:idempotent")

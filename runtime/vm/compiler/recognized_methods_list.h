@@ -48,7 +48,8 @@ namespace dart {
   V(CoreLibrary, _StringBase, _interpolate, StringBaseInterpolate, 0xecb2534a) \
   V(CoreLibrary, _StringBase, codeUnitAt, StringBaseCodeUnitAt, 0x17dbf511)    \
   V(CoreLibrary, _IntegerImplementation, toDouble, IntegerToDouble,            \
-    0x97557386)                                                                \
+    0x97557b08)                                                                \
+  V(CoreLibrary, _Double, .fromInteger, DoubleFromInteger, 0x2ac4a8fb)         \
   V(CoreLibrary, _Double, _add, DoubleAdd, 0xea494b67)                         \
   V(CoreLibrary, _Double, _sub, DoubleSub, 0x282a346e)                         \
   V(CoreLibrary, _Double, _mul, DoubleMul, 0x1f7bafac)                         \
@@ -578,7 +579,8 @@ namespace dart {
   V(CoreLibrary, _Double, get:isInfinite, Double_getIsInfinite, 0xc4ddb412)    \
   V(CoreLibrary, _Double, get:isNegative, Double_getIsNegative, 0xd45438d1)    \
   V(CoreLibrary, _Double, _mulFromInteger, Double_mulFromInteger, 0xecd1beaf)  \
-  V(CoreLibrary, _Double, .fromInteger, DoubleFromInteger, 0x7cf2c1d9)         \
+  V(CoreLibrary, _Double, ._fromIntegerNative, Double_fromIntegerNative,       \
+    0x7f350b51)                                                                \
   V(CoreLibrary, Object, ==, ObjectEquals, 0x463b5870)                         \
   V(CoreLibrary, Object, get:runtimeType, ObjectRuntimeType, 0x0364b091)       \
   V(CoreLibrary, Object, _haveSameRuntimeType, ObjectHaveSameRuntimeType,      \

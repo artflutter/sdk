@@ -993,21 +993,9 @@ void AsmIntrinsifier::Double_mulFromInteger(Assembler* assembler,
   __ Bind(normal_ir_body);
 }
 
-void AsmIntrinsifier::DoubleFromInteger(Assembler* assembler,
-                                        Label* normal_ir_body) {
-  __ movl(EAX, Address(ESP, +1 * target::kWordSize));
-  __ testl(EAX, Immediate(kSmiTagMask));
-  __ j(NOT_ZERO, normal_ir_body, Assembler::kNearJump);
-  // Is Smi.
-  __ SmiUntag(EAX);
-  __ cvtsi2sd(XMM0, EAX);
-  const Class& double_class = DoubleClass();
-  __ TryAllocate(double_class, normal_ir_body, Assembler::kNearJump,
-                 EAX,  // Result register.
-                 EBX);
-  __ movsd(FieldAddress(EAX, target::Double::value_offset()), XMM0);
-  __ ret();
-  __ Bind(normal_ir_body);
+void AsmIntrinsifier::Double_fromIntegerNative(Assembler* assembler,
+                                               Label* normal_ir_body) {
+  // Not used on this target: _Double.fromInteger has a graph body.
 }
 
 void AsmIntrinsifier::Double_getIsNaN(Assembler* assembler,

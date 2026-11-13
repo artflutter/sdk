@@ -310,6 +310,8 @@ abstract final class _IntegerImplementation implements int {
   }
 
   @pragma("vm:recognized", "other")
+  @pragma("vm:prefer-inline")
+  @pragma("vm:idempotent")
   @pragma("vm:exact-result-type", _Double)
   double toDouble() {
     return _Double.fromInteger(this);

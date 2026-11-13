@@ -1027,22 +1027,9 @@ void AsmIntrinsifier::Double_mulFromInteger(Assembler* assembler,
   __ Bind(normal_ir_body);
 }
 
-void AsmIntrinsifier::DoubleFromInteger(Assembler* assembler,
-                                        Label* normal_ir_body) {
-  __ ldr(R0, Address(SP, 0 * target::kWordSize));
-  __ BranchIfNotSmi(R0, normal_ir_body);
-  // Is Smi.
-  __ SmiUntag(R0);
-#if !defined(DART_COMPRESSED_POINTERS)
-  __ scvtfdx(V0, R0);
-#else
-  __ scvtfdw(V0, R0);
-#endif
-  const Class& double_class = DoubleClass();
-  __ TryAllocate(double_class, normal_ir_body, Assembler::kNearJump, R0, R1);
-  __ StoreDFieldToOffset(V0, R0, target::Double::value_offset());
-  __ ret();
-  __ Bind(normal_ir_body);
+void AsmIntrinsifier::Double_fromIntegerNative(Assembler* assembler,
+                                               Label* normal_ir_body) {
+  // Not used on this target: _Double.fromInteger has a graph body.
 }
 
 void AsmIntrinsifier::Double_getIsNaN(Assembler* assembler,

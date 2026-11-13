@@ -1080,22 +1080,22 @@ void AsmIntrinsifier::Double_mulFromInteger(Assembler* assembler,
   __ Bind(normal_ir_body);
 }
 
-void AsmIntrinsifier::DoubleFromInteger(Assembler* assembler,
-                                        Label* normal_ir_body) {
+void AsmIntrinsifier::Double_fromIntegerNative(Assembler* assembler,
+                                               Label* normal_ir_body) {
+#if XLEN == 32
   __ lx(A0, Address(SP, 0 * target::kWordSize));
   __ BranchIfNotSmi(A0, normal_ir_body, Assembler::kNearJump);
   // Is Smi.
   __ SmiUntag(A0);
-#if XLEN == 32
   __ fcvtdw(FA0, A0);
-#else
-  __ fcvtdl(FA0, A0);
-#endif
   const Class& double_class = DoubleClass();
   __ TryAllocate(double_class, normal_ir_body, Assembler::kNearJump, A0, TMP);
   __ StoreDFieldToOffset(FA0, A0, target::Double::value_offset());
   __ ret();
   __ Bind(normal_ir_body);
+#else
+  // Not used on this target: _Double.fromInteger has a graph body.
+#endif
 }
 
 static void DoubleIsClass(Assembler* assembler, intx_t fclass) {

@@ -1296,39 +1296,6 @@ void CallSpecializer::VisitStaticCall(StaticCallInstr* call) {
     return;
   }
 
-  if (!CompilerState::Current().is_aot()) {
-    // Only if speculative inlining is enabled.
-
-    MethodRecognizer::Kind recognized_kind = call->function().recognized_kind();
-    const CallTargets& targets = call->Targets();
-    const BinaryFeedback& binary_feedback = call->BinaryFeedback();
-
-    switch (recognized_kind) {
-      case MethodRecognizer::kDoubleFromInteger: {
-        if (call->HasICData() && targets.IsMonomorphic() &&
-            (call->FirstArgIndex() == 0)) {
-          if (binary_feedback.ArgumentIs(kSmiCid)) {
-            Definition* arg = call->ArgumentAt(0);
-            AddCheckSmi(arg, call->deopt_id(), call->env(), call);
-            ReplaceCall(call, new (Z) SmiToDoubleInstr(new (Z) Value(arg),
-                                                       call->source()));
-            return;
-          } else if (binary_feedback.ArgumentIs(kMintCid) &&
-                     CanConvertInt64ToDouble()) {
-            Definition* arg = call->ArgumentAt(0);
-            ReplaceCall(call, new (Z) Int64ToDoubleInstr(new (Z) Value(arg),
-                                                         call->deopt_id()));
-            return;
-          }
-        }
-        break;
-      }
-
-      default:
-        break;
-    }
-  }
-
   if (TryOptimizeStaticCallUsingStaticTypes(call)) {
     return;
   }

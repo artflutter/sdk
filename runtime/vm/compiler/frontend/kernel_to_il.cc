@@ -1114,6 +1114,8 @@ bool FlowGraphBuilder::IsRecognizedMethodForFlowGraph(
       return UnaryInt64OpInstr::IsSupported(Token::kCTZ);
     case MethodRecognizer::kInteger_oneBitCount:
       return UnaryInt64OpInstr::IsSupported(Token::kPOPCNT);
+    case MethodRecognizer::kDoubleFromInteger:
+      return FlowGraphCompiler::CanConvertInt64ToDouble();
     case MethodRecognizer::kDoubleToInteger:
     case MethodRecognizer::kDoubleMod:
     case MethodRecognizer::kDoubleRem:
@@ -1772,6 +1774,19 @@ FlowGraph* FlowGraphBuilder::BuildGraphOfRecognizedMethod(
         Push(op);
         body <<= op;
         body += Box(kUnboxedInt64);
+      }
+    } break;
+    case MethodRecognizer::kDoubleFromInteger: {
+      if (FlowGraphCompiler::CanConvertInt64ToDouble()) {
+        ASSERT_EQUAL(function.NumParameters(), 1);
+        body += LoadLocal(parsed_function_->RawParameterVariable(0));
+        body += UnboxTruncate(kUnboxedInt64);
+        Value* value = Pop();
+        Int64ToDoubleInstr* to_double =
+            new (Z) Int64ToDoubleInstr(value, DeoptId::kNone);
+        Push(to_double);
+        body <<= to_double;
+        body += Box(kUnboxedDouble);
       }
     } break;
     case MethodRecognizer::kFfiAsExternalTypedDataInt8:
