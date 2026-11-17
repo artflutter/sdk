@@ -244,7 +244,7 @@ class _Utf8EncoderSink extends _Utf8Encoder with StringConversionSink {
 
   void close() {
     if (_carry != 0) {
-      // addSlice will call close again, but then the carry must be equal to 0.
+      // Flushes the carry and passes `isLast` on to `_sink`, which closes it.
       addSlice("", 0, 0, true);
       return;
     }
@@ -271,9 +271,10 @@ class _Utf8EncoderSink extends _Utf8Encoder with StringConversionSink {
       if (wasCombined) start++;
       _carry = 0;
     }
+    var isLastSlice = false;
     do {
       start = _fillBuffer(str, start, end);
-      var isLastSlice = isLast && (start == end);
+      isLastSlice = isLast && (start == end);
       if (start == end - 1 && _isLeadSurrogate(str.codeUnitAt(start))) {
         if (isLast && _bufferIndex < _buffer.length - 3) {
           // There is still space for the replacement character to represent
@@ -289,7 +290,8 @@ class _Utf8EncoderSink extends _Utf8Encoder with StringConversionSink {
       _sink.addSlice(_buffer, 0, _bufferIndex, isLastSlice);
       _bufferIndex = 0;
     } while (start < end);
-    if (isLast) close();
+    // If the last slice was passed on with `isLast`, `_sink` is closed.
+    if (isLast && !isLastSlice) close();
   }
 
   // TODO(floitsch): implement asUtf8Sink. Slightly complicated because it
