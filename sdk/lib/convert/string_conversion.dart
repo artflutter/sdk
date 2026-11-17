@@ -311,9 +311,9 @@ class _Utf8ConversionSink extends ByteConversionSink {
 
   void addSlice(List<int> chunk, int startIndex, int endIndex, bool isLast) {
     _buffer.write(_decoder.convertChunked(chunk, startIndex, endIndex));
-    if (_buffer.isNotEmpty) {
+    if (!isLast && _buffer.isNotEmpty) {
       var accumulated = _buffer.toString();
-      _chunkedSink.addSlice(accumulated, 0, accumulated.length, isLast);
+      _chunkedSink.addSlice(accumulated, 0, accumulated.length, false);
       _buffer.clear();
       return;
     }
